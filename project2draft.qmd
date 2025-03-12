@@ -412,5 +412,3 @@ As @fig-prob1 shows the probability of the quality score being classified as poo
 Similar interpretations will used for @fig-prob2 and @fig-prob3. These two plots indicate the probabilities of the quality score being classified as poor by flavor and acidity grade. Again, the higher score of the flavor grade or acidity grade, the less probability being classified as poor quality. It's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
 # Conclusion
-
-To sum up,
