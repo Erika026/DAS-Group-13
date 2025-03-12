@@ -1,0 +1,416 @@
+---
+title: "Draft "
+author: "Group 13"
+number-sections: true
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+  pdf: default
+editor_options: 
+  chunk_output_type: console
+execute:
+  eval: true
+  warning: false
+  message: false
+---
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(moderndive)
+library(gapminder)
+library(sjPlot)
+library(stats)
+library(jtools)
+library(gt)
+library(MASS)
+library(knitr)
+library(dplyr)
+```
+
+# Introduction
+
+Given the coffee dataset with the features of coffee and overall quality scores from the Coffee Quality Institute, aiming to provide the key information to the local coffee farmer and help them to improve coffee production with higher quality.
+
+**Research Question:**
+
+What factors will influence the quality score of a batch of coffee being classified as good or poor and how do these factors affect the quality score for the batch.
+
+# Exploratory Data Analysis
+
+### Description of Data
+
+```{r}
+#| echo: true
+# Read dataset
+coffee <- read.csv("D:/project2/dataset13.csv")
+```
+
+```{r}
+# Remove missing value in the dataset
+coffee1 <- na.omit(coffee)
+# Check the type of the binary response variable and change to factor type.
+class(coffee1$Qualityclass)
+coffee1$Qualityclass <- as.factor(coffee1$Qualityclass)
+```
+
+```{r}
+length(unique(coffee1$country_of_origin))
+length(unique(coffee1$harvested))
+class(coffee1$harvested)
+class(coffee1$Qualityclass)
+```
+
+```{r}
+#| echo: true
+#| label: tbl-correlation between numerical explanatory variables.
+#| tbl-cap: Correlation table between variables
+coffee1|>
+  dplyr::select(aroma,flavor,acidity,
+         category_two_defects,
+         altitude_mean_meters,
+         harvested)|>
+  cor()|>
+  as.data.frame()|>
+  rownames_to_column(var = "Variable")|>
+  gt()
+```
+
+Notice that there were high correlations found between the pairs aroma and flavor(0.83); aroma and acidity(0.75); flavor and acidity(0.84), suggesting that possible colinearity occurred.
+
+## Data Visualization
+
+### **Boxplots of Explanatory Variables by Coffee Quality Class**
+
+```{r}
+#| echo: true
+#| fig-cap: Aroma Grade by Coffee Quality Class
+#| label: fig-boxplot1
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = aroma, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Aroma")+
+  theme(legend.position = "none")
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Flavor Grade by Coffee Quality Class
+#| label: fig-boxplot2
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = flavor, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Flavor")+
+  theme(legend.position = "none")
+
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Acidity Grade by Coffee Quality Class
+#| label: fig-boxplot3
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = acidity, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Acidity")+
+  theme(legend.position = "none")
+
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Count of two Category defects by Coffee Quality Class
+#| label: fig-boxplot4
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = category_two_defects, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Category_two_defects")+
+  theme(legend.position = "none")
+
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Mean Altitude (in meters) by Coffee Quality Class
+#| label: fig-boxplot5
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = altitude_mean_meters, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Altitude (by meters)")+
+  theme(legend.position = "none")
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Harvested Year by Coffee Quality Class
+#| label: fig-boxplot6
+ggplot(data = coffee1, aes(x=Qualityclass, 
+                           y = harvested, 
+                           fill=Qualityclass))+
+  geom_boxplot()+
+  labs(x = "Qualityclass", y = "Harvested Year")+
+  theme(legend.position = "none")
+
+```
+
+# Formal Analysis
+
+## Model Fitting
+
+```{r}
+#| echo: true
+# Fit GLM model.
+model <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               category_two_defects + 
+               altitude_mean_meters + 
+               harvested,
+             data = coffee1,
+             family = binomial(link = "logit"))
+```
+
+```{r}
+#| echo: true
+# check for the baseline category response variable
+levels(coffee1$Qualityclass)
+```
+
+Note in this example, the baseline category for binary response (Qualityclass) is *Good*.
+
+```{r}
+#| echo: true
+# Summary statistics
+summ(model)
+```
+
+Note the explanatory variables category_two_defects, altitude and harvested year all have the p-value greater than 0.05, which are not significant , thus shouldn't be consider for the further analysis.
+
+Using Step-wise model selection method with chosen objective criterion AIC value, remove one explanatory variable each time.
+
+```{r}
+# Model with one variable dropped.
+model2 <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               altitude_mean_meters + 
+               harvested,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model2)
+```
+
+```{r}
+model3 <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               category_two_defects + 
+               harvested,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model3)
+```
+
+```{r}
+model4 <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               category_two_defects + 
+               altitude_mean_meters,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model4)
+```
+
+Since the Model 2 has the lowest AIC value among model 2 to model , then we fit new models with one explanatory variable dropped based on model 2.
+
+```{r}
+model5 <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               harvested,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model5)
+```
+
+```{r}
+model6 <- glm(formula=Qualityclass~ aroma + flavor + acidity +
+               altitude_mean_meters,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model6)
+```
+
+Both model 5 and 6 (both contain 4 explanatory variables) have lower AIC value than Model 2, proving that the remove of that explanatory variable is effective. And Model 5 has the lower AIC value (569.67) thus we processed to further one variable removing based on Model 5.
+
+```{r}
+model7 <- glm(formula=Qualityclass~ aroma + flavor + acidity,
+             data = coffee1,
+             family = binomial(link = "logit"))
+
+summ(model7)
+```
+
+Since all the p-values of estimated parameters are less than 0.05, confirmed that the remaining explanatory variables are all significant. The AIC value for Model 7 is 568.61 which is indeed lower than that of Model 5, so once again confirmed that Model 7 is an appropriate model for the model selection stage.
+
+## log-odds
+
+```{r}
+mod1coefs <- round(coef(model7),2)
+```
+
+\begin{align}\ln(\frac{p}{1-p}) &= \alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity}\nonumber\\&= `r mod1coefs[1]`  `r mod1coefs[2]` \cdot \textrm{aroma}`r mod1coefs[3]` \cdot \textrm{flavor} `r mod1coefs[4]` \cdot \textrm{acidity} \nonumber \end{align}
+
+where *p* = Prob (Quality score is **Poor**) and 1 - p = Prob(Quality score is **Good**) as we already check and confirmed the baseline category response is Good in the previous step.
+
+Thus, the log-odds of the Quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged. Similarly, the log-odds of the Quality score for the batch is Poor decrease by 7.02 for every unit increase in flavor grade when hold other variables kept unchanged. And the log-odds of the Quality score for the batch is Poor decrease by 4.42 for every unit increase in acidity grade when hold other variables constant.
+
+```{r}
+#| echo: true
+#| label: tbl-logoddsCI
+#| tbl-cap: 95% Confidence Interval for the Log-odds
+# 95% Confidence interval for the log-odds by different explanatory variable.
+confint(model7)|>
+  kable()
+```
+
+For @tbl-logoddsCI, since all the intervals don't contain 1 thus again confirmed that the explanatory variables in model 7 are all significant.
+
+```{r}
+#| echo: true
+mod.coef.logodds <- model7 |>
+  summary()|>
+  coef()
+```
+
+### 95% Confidence Interval Plot For Log-Odds
+
+```{r}
+#| echo: true
+#| fig-cap: 95% Confidence Interval Plot for Log-Odds
+#| label: fig-CIplot
+# 95% Confidence Interval Plot for Log-Odds.
+plot_model(model7, show.values = TRUE, transform = NULL,
+           title = "Log-Odds (Poor Coffee Batch Qualtiy Score)", show.p = FALSE)
+```
+
+```{r}
+# Add log-odds to the dataset
+coffee1 <- coffee1 |>
+  mutate(logodds.poor = predict(model7))
+```
+
+For @tbl-logoddsCI, since all the intervals(\[-5.8,-3.2\] for aroma grade, \[-8.7,-5.4\] for flavor grade, \[-5.7,-3.1\] for acidity grade) don't contain zero thus inidcates that the explanatory variables in model 7 are all significant. And the @fig-CIplotodd again confirmed the siginificants of the explanatiory variables visually.
+
+For more straightforward interpretation, we use Odds ratio scale.
+
+## Odds Ratio
+
+$$
+\frac{p}{1-p} = exp(\alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity})
+$$
+
+```{r}
+#| echo: true
+#| label: tbl-summtable
+#| tbl-cap: Summary Table on the Odds Scale
+model7 |>
+  coef()|>
+  exp()|>
+  as.data.frame()|>
+  rownames_to_column(var = "Variable")|>
+  gt()
+```
+
+the value of the intercept ($1.82\times10^{52}$) gives the odds of a quality class being poor given all explanatory variables equal to zero, but in reality, it is highly unlikely for a batch of coffee have the grades of aroma, flavor and acidity all approach to zero. It could still be interpreted as when chance of a batch of coffee be classified as poor quality are ($1.82\times10^{52}$) % greater than them being classified as good quality when all the explanatory variable equals to zero.
+
+For aroma grade, we have an odds of $1.10\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor increase by a factor of 0.01 when other variables unchanged. 
+
+The odds for flavor grade is $8.98\times10^{-4}$, thus the odds of the quality class being poor increase by a factor of 0.00089 for every 1 unit increase in flavor grade,keeping all other variables constant.
+
+Finally, the odds for acidity grade is $1.20\times10^{-2}$, indicating that for every 1 unit increase in acidity grade, the odds of the quality class being poor increase by a factor of 0.012 keeping all other variable constant. 
+
+```{r}
+#| echo: true
+#| label: tbl-oddsCI
+#| tbl-cap: 95% Confidence Interval for the Odds
+# 95% Confidence interval for the odds by different explanatory variable.
+confint(model7) |>
+  exp() |>
+  kable()
+```
+
+```{r}
+#| echo: true
+#| fig-cap: 95% Confidence Interval Plot for Odds Ratio
+#| label: fig-CIplotodd
+plot_model(model7, show.values = TRUE, 
+           title = "Odds (Poor Quality Score)", show.p = FALSE)
+```
+
+From @tbl-oddsCI, all the intervals(\[0.0029, 0.039\] for aroma grade, \[0.00016,0.0043\] for flavor grade, \[0.0032,0.043\] for acidity grade) don't contain zero thus indicate that the explanatory variables in model 7 are all significant.
+
+The @fig-CIplotodd shows the 95% confidence intervals for three explanatory variable, again confirmed the significance of the explanatory variables visually.
+
+## Probability
+
+As we could obtain the probability *p* = Prob (Quality score is **Poor**) using:
+
+$$
+p = \frac{exp(\alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity})}{1 + exp(\alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity})}
+$$
+
+```{r}
+# Add probability to the dataset.
+coffee1 <- coffee1 |>
+  mutate(probs.poor = fitted(model7))
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Probability of Quality Score is Poor by Aroma Grade.
+#| label: fig-prob1
+ggplot(data = coffee1, aes(x = aroma, y = probs.poor)) +
+  geom_smooth(method="glm", 
+              method.args = list(family="binomial"), 
+              se = FALSE) +
+  labs(x = "Aroma Grade", 
+       y = "Probability of Quality Score is Poor by Aroma Grade")
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Probability of Quality Score is Poor by Flavor Grade.
+#| label: fig-prob2
+ggplot(data = coffee1, aes(x = flavor, y = probs.poor)) +
+  geom_smooth(method="glm", 
+              method.args = list(family="binomial"), 
+              se = FALSE) +
+  labs(x = "Flavor Grade", 
+       y = "Probability of Quality Score is Poor by Flavor Grade")
+```
+
+```{r}
+#| echo: true
+#| fig-cap: Probability of Quality Score is Poor by Acidity Grade.
+#| label: fig-prob3
+ggplot(data = coffee1, aes(x = acidity, y = probs.poor)) +
+  geom_smooth(method="glm", 
+              method.args = list(family="binomial"), 
+              se = FALSE) +
+  labs(x = "Acidity Grade", 
+       y = "Probability of Quality Score is Poor by Acidity Grade")
+```
+
+As @fig-prob1 shows the probabilty of the quality score being classified as poor by aroma grade, the less the aroma grade , the higher probability being classified as poor quality. It's reasonable to have such shape as the median aroma grade is round 7.2 (recalled from the @fig-boxplot1 ) so the ouliter (aroma grade equals to zero) will be directly classified as poor quality with the probability of 1.
+
+Similar interpretations will used for @fig-prob2 and @fig-prob3. These two plots indicate the probabilities of the quality score being classified as poor by flavor and acidity grade. Again, the higher score of the flavor grade or acidity grade, the less probability being classified as poor quality. It's also reasonable to have such shape: the ouliters (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
+
+# Conclusion
+
+To sum up,
