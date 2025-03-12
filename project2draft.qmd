@@ -258,6 +258,18 @@ summ(model7)
 
 Since all the p-values of estimated parameters are less than 0.05, confirmed that the remaining explanatory variables are all significant. The AIC value for Model 7 is 568.61 which is indeed lower than that of Model 5, so once again confirmed that Model 7 is an appropriate model for the model selection stage.
 
+```{r}
+#| echo: true
+# Fit GLM model including all variables.
+coffee1$country_of_origin <- as.factor(coffee1$country_of_origin)
+glm_model <- glm(Qualityclass ~ .,
+                 data = coffee1,
+                 family = binomial(link = "logit"))
+summ(glm_model)
+```
+
+Following the incorporation of all variables into the model, an enhancement in R square, that is to say an improvement in interpretability, was observed, concomitant with a diminution in AIC. However, a substantial increase was observed in the BIC, which may not be considered a valuable gain due to the cost of adding a large number of degrees of freedom.
+
 ## log-odds
 
 ```{r}
