@@ -305,7 +305,7 @@ coffee1 <- coffee1 |>
   mutate(logodds.poor = predict(model7))
 ```
 
-For @tbl-logoddsCI, since all the intervals(\[-5.8,-3.2\] for aroma grade, \[-8.7,-5.4\] for flavor grade, \[-5.7,-3.1\] for acidity grade) don't contain zero thus inidcates that the explanatory variables in model 7 are all significant. And the @fig-CIplotodd again confirmed the siginificants of the explanatiory variables visually.
+For @tbl-logoddsCI, since all the intervals(\[-5.8,-3.2\] for aroma grade, \[-8.7,-5.4\] for flavor grade, \[-5.7,-3.1\] for acidity grade) don't contain zero thus indicates that the explanatory variables in model 7 are all significant. And the @fig-CIplotodd again confirmed the significant of the explanatiory variables visually.
 
 For more straightforward interpretation, we use Odds ratio scale.
 
@@ -329,11 +329,11 @@ model7 |>
 
 the value of the intercept ($1.82\times10^{52}$) gives the odds of a quality class being poor given all explanatory variables equal to zero, but in reality, it is highly unlikely for a batch of coffee have the grades of aroma, flavor and acidity all approach to zero. It could still be interpreted as when chance of a batch of coffee be classified as poor quality are ($1.82\times10^{52}$) % greater than them being classified as good quality when all the explanatory variable equals to zero.
 
-For aroma grade, we have an odds of $1.10\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor increase by a factor of 0.01 when other variables unchanged. 
+For aroma grade, we have an odds of $1.10\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor increase by a factor of 0.01 when other variables unchanged.
 
 The odds for flavor grade is $8.98\times10^{-4}$, thus the odds of the quality class being poor increase by a factor of 0.00089 for every 1 unit increase in flavor grade,keeping all other variables constant.
 
-Finally, the odds for acidity grade is $1.20\times10^{-2}$, indicating that for every 1 unit increase in acidity grade, the odds of the quality class being poor increase by a factor of 0.012 keeping all other variable constant. 
+Finally, the odds for acidity grade is $1.20\times10^{-2}$, indicating that for every 1 unit increase in acidity grade, the odds of the quality class being poor increase by a factor of 0.012 keeping all other variable constant.
 
 ```{r}
 #| echo: true
@@ -353,7 +353,7 @@ plot_model(model7, show.values = TRUE,
            title = "Odds (Poor Quality Score)", show.p = FALSE)
 ```
 
-From @tbl-oddsCI, all the intervals(\[0.0029, 0.039\] for aroma grade, \[0.00016,0.0043\] for flavor grade, \[0.0032,0.043\] for acidity grade) don't contain zero thus indicate that the explanatory variables in model 7 are all significant.
+From @tbl-oddsCI, all the intervals($[0.0029, 0.039]$ for aroma grade, $[0.00016,0.0043]$ for flavor grade, $[0.0032,0.043]$ for acidity grade) don't contain zero thus indicate that the explanatory variables in model 7 are all significant.
 
 The @fig-CIplotodd shows the 95% confidence intervals for three explanatory variable, again confirmed the significance of the explanatory variables visually.
 
@@ -407,9 +407,9 @@ ggplot(data = coffee1, aes(x = acidity, y = probs.poor)) +
        y = "Probability of Quality Score is Poor by Acidity Grade")
 ```
 
-As @fig-prob1 shows the probabilty of the quality score being classified as poor by aroma grade, the less the aroma grade , the higher probability being classified as poor quality. It's reasonable to have such shape as the median aroma grade is round 7.2 (recalled from the @fig-boxplot1 ) so the ouliter (aroma grade equals to zero) will be directly classified as poor quality with the probability of 1.
+As @fig-prob1 shows the probability of the quality score being classified as poor by aroma grade, the less the aroma grade , the higher probability being classified as poor quality. It's reasonable to have such shape as the median aroma grade is round 7.2 (recalled from the @fig-boxplot1 ) so the outliers (aroma grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
-Similar interpretations will used for @fig-prob2 and @fig-prob3. These two plots indicate the probabilities of the quality score being classified as poor by flavor and acidity grade. Again, the higher score of the flavor grade or acidity grade, the less probability being classified as poor quality. It's also reasonable to have such shape: the ouliters (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
+Similar interpretations will used for @fig-prob2 and @fig-prob3. These two plots indicate the probabilities of the quality score being classified as poor by flavor and acidity grade. Again, the higher score of the flavor grade or acidity grade, the less probability being classified as poor quality. It's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
 # Conclusion
 
