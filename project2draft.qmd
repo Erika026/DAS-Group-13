@@ -275,7 +275,7 @@ mod1coefs <- round(coef(model3),4)
 
 where *p* = Prob (Quality score is **Poor**) and 1 - p = Prob(Quality score is **Good**) as we already check and confirmed the baseline category response is Good in the previous step.
 
-Thus, the log-odds of the Quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged. Similarly, the log-odds of the Quality score for the batch is Poor decrease by 7.02 for every unit increase in flavor grade when hold other variables kept unchanged. And the log-odds of the Quality score for the batch is Poor decrease by 4.42 for every unit increase in acidity grade when hold other variables constant.
+Thus, the log-odds of the Quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged. Similarly, the log-odds of the Quality score for the batch is Poor decrease by 7.02 for every unit increase in flavor grade when hold other variables kept unchanged. And the log-odds of the Quality score for the batch is Poor decrease by 4.42 for every unit increase in acidity grade when hold other variables constant.The log-odds of a coffee batch being Poor slightly decreases as altitude increases when hold other variables kept unchanged.
 
 ```{r}
 #| echo: true
@@ -286,7 +286,7 @@ confint(model3)|>
   kable()
 ```
 
-For @tbl-logoddsCI, since most of the intervals don't contain 1 thus again confirmed that the explanatory variables in model 2 are significant excluding the harvested.
+For @tbl-logoddsCI, since most of the intervals don't contain 1 thus again confirmed that the explanatory variables in model 2 are significant excluding the harvested. Flavor has the largest effect (widest range of negative values), reinforcing its importance in coffee quality classification. Altitude has the smallest effect size, though it remains statistically significant.
 
 ```{r}
 #| echo: true
@@ -440,6 +440,9 @@ ggplot(data = coffee1, aes(x = acidity, y = probs.poor)) +
 
 As @fig-prob1 shows the probability of the quality score being classified as poor by aroma grade, the less the aroma grade , the higher probability being classified as poor quality. It's reasonable to have such shape as the median aroma grade is round 7.2 (recalled from the @fig-boxplot1 ) so the outliers (aroma grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
-Similar interpretations will used for @fig-prob2 and @fig-prob3. These two plots indicate the probabilities of the quality score being classified as poor by flavor and acidity grade. Again, the higher score of the flavor grade or acidity grade, the less probability being classified as poor quality. It's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
+Similar interpretations will used for @fig-prob2, @fig-prob3 and @fig-prob5. These three plots indicate the probabilities of the quality score being classified as poor by flavor, acidity grade and harvested year. Again, the higher score of the flavor grade, acidity grade or harvested year, the less probability being classified as poor quality. According to @fig-boxplot3, @fig-boxplot4 and @fig-boxplot6, it's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) and harvested year contains extreme low-altitude values (close to zero) will be directly classified as poor quality with the probability of 1.
+
+As @fig-prob4 shows the probability of the quality score being classified as poor by aroma grade, lower altitudes correspond to a higher probability of being classified as poor quality, aligning with @fig-boxplot5, where Poor quality coffee has more low-altitude samples. The probability curve gradually declines, indicating better quality at higher altitudes. It is also reasonable to have such shape: the outliers (large number of altitude close to zero) will be classified as poor quality with the probability of 0.8.
+
 
 # Conclusion
