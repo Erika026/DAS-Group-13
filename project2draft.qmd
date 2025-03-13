@@ -235,7 +235,7 @@ model3 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
 summ(model3)
 ```
 
-The AIC of model 3 is observed to increase following the removal of the variable harvested, as opposed to the expected decrease. Consequently, model 2 is deemed to be the most suitable, even though the variable harvested shows a p-value greater than 0.05.
+The AIC of model 3 is observed to increase a little following the removal of the variable harvested, but the BIC decrease as expected. Consequently, model 3 is deemed to be the most suitable.
 
 ```{r}
 #| echo: true
@@ -246,15 +246,19 @@ glm_model <- glm(Qualityclass ~ .,
                  family = binomial(link = "logit"))
 summ(glm_model)
 ```
+
 Following the incorporation of all variables into the model, an enhancement in R square, that is to say an improvement in interpretability, was observed, concomitant with a diminution in AIC. However, a substantial increase was observed in the BIC, which may not be considered a valuable gain due to the cost of adding a large number of degrees of freedom.
 
 ## log-odds
 
 ```{r}
-mod1coefs <- round(coef(model2),2)
+mod1coefs <- round(coef(model3),4)
 ```
 
-\begin{align}\ln(\frac{p}{1-p}) &= \alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity}\nonumber\\&= `r mod1coefs[1]`  `r mod1coefs[2]` \cdot \textrm{aroma}`r mod1coefs[3]` \cdot \textrm{flavor} `r mod1coefs[4]` \cdot \textrm{acidity} \nonumber \end{align}
+\begin{align}
+\ln\left(\frac{p}{1-p}\right) &= \alpha + \beta_1 \cdot \textrm{aroma} +\beta_2 \cdot \textrm{flavor} + \beta_3 \cdot \textrm{acidicity} + \beta_4 \cdot \textrm{altitude\_mean\_meters}\nonumber\\
+&= `r mod1coefs[1]`  `r mod1coefs[2]` \cdot \textrm{aroma}`r mod1coefs[3]` \cdot \textrm{flavor} `r mod1coefs[4]` \cdot \textrm{acidity} `r mod1coefs[5]` \cdot \textrm{altitude\_mean\_meters} \nonumber
+\end{align}
 
 where *p* = Prob (Quality score is **Poor**) and 1 - p = Prob(Quality score is **Good**) as we already check and confirmed the baseline category response is Good in the previous step.
 
@@ -265,7 +269,7 @@ Thus, the log-odds of the Quality score for the batch is Poor decrease by 4.5 fo
 #| label: tbl-logoddsCI
 #| tbl-cap: 95% Confidence Interval for the Log-odds
 # 95% Confidence interval for the log-odds by different explanatory variable.
-confint(model2)|>
+confint(model3)|>
   kable()
 ```
 
@@ -273,7 +277,7 @@ For @tbl-logoddsCI, since most of the intervals don't contain 1 thus again confi
 
 ```{r}
 #| echo: true
-mod.coef.logodds <- model2 |>
+mod.coef.logodds <- model3 |>
   summary()|>
   coef()
 ```
@@ -285,14 +289,14 @@ mod.coef.logodds <- model2 |>
 #| fig-cap: 95% Confidence Interval Plot for Log-Odds
 #| label: fig-CIplot
 # 95% Confidence Interval Plot for Log-Odds.
-plot_model(model2, show.values = TRUE, transform = NULL,
+plot_model(model3, show.values = TRUE, transform = NULL,
            title = "Log-Odds (Poor Coffee Batch Qualtiy Score)", show.p = FALSE)
 ```
 
 ```{r}
 # Add log-odds to the dataset
 coffee1 <- coffee1 |>
-  mutate(logodds.poor = predict(model2))
+  mutate(logodds.poor = predict(model3))
 ```
 
 For @tbl-logoddsCI, since most of the intervals($[-6.0908,-3.2701]$ for aroma grade, $[-8.8598,-5.4496]$ for flavor grade, $[-5.4826,-2.8223]$ for acidity grade, $[-0.0013,-0.0003]$ for altitude_mean_meters grade, $[-0.2124,0.0203]$ for harvested grade), excluding the variable harvested, don't contain zero thus indicates that the explanatory variables in model 2 are significant. And the @fig-CIplotodd again confirmed the significant of the explanatory variables visually.
@@ -309,7 +313,7 @@ $$
 #| echo: true
 #| label: tbl-summtable
 #| tbl-cap: Summary Table on the Odds Scale
-model2 |>
+model3 |>
   coef()|>
   exp()|>
   as.data.frame()|>
@@ -330,7 +334,7 @@ Finally, the odds for acidity grade is $1.20\times10^{-2}$, indicating that for 
 #| label: tbl-oddsCI
 #| tbl-cap: 95% Confidence Interval for the Odds
 # 95% Confidence interval for the odds by different explanatory variable.
-confint(model2) |>
+confint(model3) |>
   exp() |>
   kable()
 ```
@@ -339,7 +343,7 @@ confint(model2) |>
 #| echo: true
 #| fig-cap: 95% Confidence Interval Plot for Odds Ratio
 #| label: fig-CIplotodd
-plot_model(model2, show.values = TRUE, 
+plot_model(model3, show.values = TRUE, 
            title = "Odds (Poor Quality Score)", show.p = FALSE)
 ```
 
@@ -358,7 +362,7 @@ $$
 ```{r}
 # Add probability to the dataset.
 coffee1 <- coffee1 |>
-  mutate(probs.poor = fitted(model2))
+  mutate(probs.poor = fitted(model3))
 ```
 
 ```{r}
