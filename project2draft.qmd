@@ -117,6 +117,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   labs(x = "Qualityclass", y = "Aroma")+
   theme(legend.position = "none")
 ```
+In @fig-boxplot2, the boxplot displays the distribution of the Aroma scores for coffee samples categorized into two quality classes: Good and Poor. The median aroma score for the Good quality class is higher than that of the Poor quality class, indicating that coffee samples classified as good tend to have better aroma ratings. The IQR (the length of the box) is similar for both quality classes, suggesting comparable variability in aroma scores within each category. The spread of aroma ratings is slightly wider for Poor quality coffee compared to Good coffee. The Good quality class has a few high aroma outliers above 8.5, whereas the Poor class has some lower outliers near 7.0. In conclusion, coffee samples with a Good quality classification generally exhibit higher aroma ratings, whereas Poor quality samples tend to have lower median scores and slightly higher variability.
 
 ```{r}
 #| echo: true
@@ -130,6 +131,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
+In @fig-boxplot2, the boxplot illustrates the distribution of Flavor scores for coffee samples categorized as either Good or Poor quality.The median flavor score for the Good quality class is noticeably higher than that of the Poor class, suggesting that coffee samples classified as Good tend to have better flavor ratings on average. The IQR (box length) for Good quality coffee is slightly smaller than that of Poor quality coffee, indicating that the flavor ratings are more consistent within the Good category. The Poor quality class exhibits a wider spread in scores, indicating greater variability in flavor ratings. Both quality classes have several outliers, with Good quality coffee having high-value outliers above 8.5. The Poor category has more outliers on the lower end, with flavor scores dropping below 6.5. In conclusion, coffee samples in the Good quality class generally receive higher flavor ratings than those in the Poor class. The Poor quality coffee exhibits greater variability in flavor, with some samples scoring significantly lower.
 
 ```{r}
 #| echo: true
@@ -143,6 +145,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
+In @fig-boxplot3, the boxplot illustrates the distribution of Acidity scores for coffee samples categorized as either Good or Poor quality. The median acidity score for the Good quality class is higher than that of the Poor quality class, suggesting that coffee samples classified as Good generally have higher acidity ratings, which may contribute to a brighter and more desirable flavor profile. The IQR (box length) for both Good and Poor quality classes appears similar, indicating comparable variability in acidity scores. However, Good quality coffee seems to have a slightly more compact distribution, implying more consistency in acidity ratings. Both classes have several outliers, but Good quality coffee has more outliers above 8.0, while Poor quality coffee has more outliers below 7.0. This suggests that some poor-quality coffee samples have notably lower acidity scores, while some good-quality samples exhibit particularly high acidity. In conclusion, coffee samples classified as Good generally have higher and more consistent acidity ratings compared to Poor quality samples, which shows greater variability and lower acidity scores.
 
 ```{r}
 #| echo: true
@@ -156,6 +159,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
+In @fig-boxplot4, The boxplot visualizes the distribution of Category Two Defects across different Coffee Quality Classes (Good and Poor). The median number of defects is slightly higher for the Poor quality class compared to the Good quality class, suggests that higher defect counts are more commonly associated with lower-quality coffee. Both quality classes have a similar IQR (box length), meaning the variability in defect counts within each category is comparable. The Poor quality class exhibits a slightly wider spread, indicating a greater range of defect occurrences. Both quality classes contain numerous outliers, but Poor quality coffee has more extreme values, with defect counts exceeding 15. In conclusion, poor quality coffee generally has a higher number of defects than Good quality coffee. However, defects are not entirely absent in Good quality coffee, as some samples still exhibit minor defects.
 
 ```{r}
 #| echo: true
@@ -168,7 +172,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   labs(x = "Qualityclass", y = "Altitude (by meters)")+
   theme(legend.position = "none")
 ```
-
+In @fig-boxplot5, boxplot visualizes the distribution of mean altitude (in meters) for coffee samples classified into Good and Poor quality classes. The median altitude for the Good quality class is slightly higher than that of the Poor quality class. Both quality classes exhibit similar IQRs (box lengths), indicating comparable variability in growing altitudes. However, the Good quality class appears to have a higher overall distribution of altitude values. Both quality classes contain multiple outliers, but the Poor quality class has more extreme low-altitude values. In conclusion, good quality coffee is generally associated with higher altitude cultivation, while Poor quality coffee includes more low-altitude samples and exhibits greater variability. 
 ```{r}
 #| echo: true
 #| fig-cap: Harvested Year by Coffee Quality Class
@@ -181,7 +185,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
-
+In @fig-boxplot6, this boxplot visualizes the distribution of harvested years for coffee samples categorized as Good and Poor quality classes. The median harvested year for both Good and Poor quality classes appears to be similar, around 2014, suggesting that coffee quality may not be strongly influenced by the harvest year within this dataset. The IQRs (box lengths) are nearly identical, indicating that both quality classes have a similar spread of harvested years. The typical harvest years for both Good and Poor quality coffee range approximately from 2012 to 2016. There do not appear to be significant outliers, suggesting a relatively consistent harvest time distribution across quality classes. In conclusion, harvest year does not appear to be a key determinant of coffee quality in this dataset.
 # Formal Analysis
 
 ## Model Fitting
