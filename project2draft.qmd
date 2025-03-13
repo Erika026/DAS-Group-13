@@ -117,7 +117,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   labs(x = "Qualityclass", y = "Aroma")+
   theme(legend.position = "none")
 ```
-In @fig-boxplot2, the boxplot displays the distribution of the Aroma scores for coffee samples categorized into two quality classes: Good and Poor. The median aroma score for the Good quality class is higher than that of the Poor quality class, indicating that coffee samples classified as good tend to have better aroma ratings. The IQR (the length of the box) is similar for both quality classes, suggesting comparable variability in aroma scores within each category. The spread of aroma ratings is slightly wider for Poor quality coffee compared to Good coffee. The Good quality class has a few high aroma outliers above 8.5, whereas the Poor class has some lower outliers near 7.0. In conclusion, coffee samples with a Good quality classification generally exhibit higher aroma ratings, whereas Poor quality samples tend to have lower median scores and slightly higher variability.
+In @fig-boxplot1, the boxplot displays the distribution of the Aroma scores for coffee samples categorized into two quality classes: Good and Poor. The median aroma score for the Good quality class is higher than that of the Poor quality class, indicating that coffee samples classified as good tend to have better aroma ratings. The IQR (the length of the box) is similar for both quality classes, suggesting comparable variability in aroma scores within each category. The spread of aroma ratings is slightly wider for Poor quality coffee compared to Good coffee. The Good quality class has a few high aroma outliers above 8.5, whereas the Poor class has some lower outliers near 7.0. In conclusion, coffee samples with a Good quality classification generally exhibit higher aroma ratings, whereas Poor quality samples tend to have lower median scores and slightly higher variability.
 
 ```{r}
 #| echo: true
@@ -215,6 +215,7 @@ Note in this example, the baseline category for binary response (Qualityclass) i
 summ(model)
 ```
 
+The model suggests that Aroma, Flavor, and Acidity are the most important factors in determining coffee quality. Harvested Year is also not significant (p = 0.11), suggesting that coffee quality classification does not strongly depend on the year it was harvested. 
 Note that the explanatory variable category_two_defects has a p-value of 1, which is not significant at all. Consequently, it should not be considered for the further analysis and should be removed initially.
 
 ```{r}
@@ -228,7 +229,8 @@ model2 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
 summ(model2)
 ```
 
-Assuming a p-value of 0.05, an attempt was made to remove the only non-significant variable, harvested.
+The model remains strong and statistically valid, with Aroma, Flavor, and Acidity being the strongest predictors of coffee quality. Altitude is statistically significant but has a minimal effect, meaning it may not be a primary determinant of quality. The model fit (AIC/BIC) decreased, indicating that removing insignificant variables does not impact predictive power.
+Assuming a p-value of 0.05, harvested Year (p = 0.11) remains not statistically significant, meaning coffee quality is not strongly dependent on the year of harvest, an attempt was made to remove the only non-significant variable, harvested.
 
 ```{r}
 model3 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
@@ -239,6 +241,7 @@ model3 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
 summ(model3)
 ```
 
+All Remaining Variables Are Statistically Significant (p < 0.05): Aroma, Flavor, and Acidity remain the strongest predictors, with higher values correlating with better coffee quality； Altitude is still significant, but its effect size is very small.
 The AIC of model 3 is observed to increase a little following the removal of the variable harvested, but the BIC decrease as expected. Consequently, model 3 is deemed to be the most suitable.
 
 ```{r}
@@ -250,6 +253,12 @@ glm_model <- glm(Qualityclass ~ .,
                  family = binomial(link = "logit"))
 summ(glm_model)
 ```
+
+Significant Predictors (p < 0.05):
+Aroma, Flavor, and Acidity remain highly significant, confirming their strong impact on coffee quality.
+Several countries of origin (Colombia, India, Thailand, Uganda) are statistically significant, indicating that origin may influence coffee quality.
+Non-Significant Predictors (p > 0.05):
+Many country of origin variables (e.g., Burundi, China, Ethiopia, Vietnam) are not significant, meaning they do not strongly predict coffee quality. Altitude, Harvest Year, and Category Two Defects remain non-significant, suggesting they should be removed in further refinements.
 
 Following the incorporation of all variables into the model, an enhancement in R square, that is to say an improvement in interpretability, was observed, concomitant with a diminution in AIC. However, a substantial increase was observed in the BIC, which may not be considered a valuable gain due to the cost of adding a large number of degrees of freedom.
 
