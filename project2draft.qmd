@@ -446,3 +446,20 @@ As @fig-prob4 shows the probability of the quality score being classified as poo
 
 
 # Conclusion
+Sensory Attributes (Aroma, Flavor, Acidity) Are the Strongest Predictors:
+Figures @fig-prob1, @fig-prob2, and @fig-prob3 confirm that higher aroma, flavor, and acidity scores significantly reduce the probability of being classified as Poor quality. Flavor has the largest impact, followed by aroma and acidity. Boxplots (@fig-boxplot1, @fig-boxplot2, @fig-boxplot3) further show that Good quality coffee has consistently higher sensory scores.
+Implication: Farmers should prioritize improving flavor, aroma, and acidity through better cultivation, harvesting, and processing techniques.
+
+Altitude Has a Moderate but Significant Effect:
+@fig-prob4 shows that higher altitude correlates with better coffee quality, with low-altitude coffee more likely to be classified as Poor. @fig-boxplot5 confirms that Good coffee tends to be grown at higher altitudes, though outliers exist.
+Implication: Farmers in higher-altitude regions may naturally produce higher-quality coffee, while low-altitude farmers may need to focus on post-harvest processing to compensate.
+
+Harvested Year Has Limited Impact:
+@fig-prob5 shows that coffee from older harvests has a higher probability of being Poor, aligning with @fig-boxplot6, where Poor quality coffee tends to have older harvest years. However, the overlapping boxplots indicate that harvest year alone does not strictly determine quality—some older beans still maintain high quality.
+Implication: Farmers should focus on proper storage and post-harvest processing to preserve quality over time.
+
+By implementing following improvements, local coffee farmers can enhance their coffee quality and increase the chances of classification as high-quality (Good) coffee.
+1. Focus on enhancing sensory attributes (Flavor, Aroma, Acidity) – This has the greatest impact on quality classification. 
+2. If growing at low altitudes, compensate with better processing techniques – Higher altitudes naturally favor quality, but post-harvest handling can improve lower-altitude coffee.
+3. Ensure proper storage and handling of harvested beans – Even older harvests can maintain high quality if well-preserved.
+4. Processing quality matters more than defects or origin – Farmers should focus on fermentation, drying, and sorting techniques to maximize quality.
