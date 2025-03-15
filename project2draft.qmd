@@ -117,7 +117,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   labs(x = "Qualityclass", y = "Aroma")+
   theme(legend.position = "none")
 ```
-In @fig-boxplot1, the boxplot displays the distribution of the Aroma scores for coffee samples categorized into two quality classes: Good and Poor. The median aroma score for the Good quality class is higher than that of the Poor quality class, indicating that coffee samples classified as good tend to have better aroma ratings. The IQR (the length of the box) is similar for both quality classes, suggesting comparable variability in aroma scores within each category. The spread of aroma ratings is slightly wider for Poor quality coffee compared to Good coffee. The Good quality class has a few high aroma outliers above 8.5, whereas the Poor class has some lower outliers near 7.0. In conclusion, coffee samples with a Good quality classification generally exhibit higher aroma ratings, whereas Poor quality samples tend to have lower median scores and slightly higher variability.
+@fig-boxplot1 shows a boxplot of Aroma scores for coffee batch being classified as Good and Poor quality. The median aroma score is higher for the Good quality class, indicating better aroma ratings. Both classes have similar variability (IQR), but the Poor quality class shows a slightly wider overall spread.
 
 ```{r}
 #| echo: true
@@ -131,7 +131,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
-In @fig-boxplot2, the boxplot illustrates the distribution of Flavor scores for coffee samples categorized as either Good or Poor quality.The median flavor score for the Good quality class is noticeably higher than that of the Poor class, suggesting that coffee samples classified as Good tend to have better flavor ratings on average. The IQR (box length) for Good quality coffee is slightly smaller than that of Poor quality coffee, indicating that the flavor ratings are more consistent within the Good category. The Poor quality class exhibits a wider spread in scores, indicating greater variability in flavor ratings. Both quality classes have several outliers, with Good quality coffee having high-value outliers above 8.5. The Poor category has more outliers on the lower end, with flavor scores dropping below 6.5. In conclusion, coffee samples in the Good quality class generally receive higher flavor ratings than those in the Poor class. The Poor quality coffee exhibits greater variability in flavor, with some samples scoring significantly lower.
+@fig-boxplot2 shows a boxplot of Flavor scores for coffee batch being classified as Good and Poor quality. The median flavor score for the Good quality class is noticeably higher than that of the Poor class. The IQR (box length) for Good quality coffee is slightly smaller than that of Poor quality coffee, but the Poor quality class exhibits a wider spread in scores.
 
 ```{r}
 #| echo: true
@@ -145,7 +145,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
-In @fig-boxplot3, the boxplot illustrates the distribution of Acidity scores for coffee samples categorized as either Good or Poor quality. The median acidity score for the Good quality class is higher than that of the Poor quality class, suggesting that coffee samples classified as Good generally have higher acidity ratings, which may contribute to a brighter and more desirable flavor profile. The IQR (box length) for both Good and Poor quality classes appears similar, indicating comparable variability in acidity scores. However, Good quality coffee seems to have a slightly more compact distribution, implying more consistency in acidity ratings. Both classes have several outliers, but Good quality coffee has more outliers above 8.0, while Poor quality coffee has more outliers below 7.0. This suggests that some poor-quality coffee samples have notably lower acidity scores, while some good-quality samples exhibit particularly high acidity. In conclusion, coffee samples classified as Good generally have higher and more consistent acidity ratings compared to Poor quality samples, which shows greater variability and lower acidity scores.
+@fig-boxplot3 shows a boxplot of Acidity scores for coffee batch being classified as Good and Poor quality. The median acidity score for the Good quality class is higher than that of the Poor quality class. The IQR (box length) for both Good and Poor quality classes appears similar. However, Good quality coffee seems to have a slightly more compact distribution. Both classes have several outliers, but Good quality coffee has more outliers above 8.0, while Poor quality coffee has more outliers below 7.0. 
 
 ```{r}
 #| echo: true
@@ -159,7 +159,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
-In @fig-boxplot4, The boxplot visualizes the distribution of Category Two Defects across different Coffee Quality Classes (Good and Poor). The median number of defects is slightly higher for the Poor quality class compared to the Good quality class, suggests that higher defect counts are more commonly associated with lower-quality coffee. Both quality classes have a similar IQR (box length), meaning the variability in defect counts within each category is comparable. The Poor quality class exhibits a slightly wider spread, indicating a greater range of defect occurrences. Both quality classes contain numerous outliers, but Poor quality coffee has more extreme values, with defect counts exceeding 15. In conclusion, poor quality coffee generally has a higher number of defects than Good quality coffee. However, defects are not entirely absent in Good quality coffee, as some samples still exhibit minor defects.
+@fig-boxplot4 shows a boxplot of Category of two defects for coffee batch being classified as Good and Poor quality. The median number of defects is slightly higher for the Poor quality class compared to the Good quality class. Both quality classes have a similar IQR, but the Poor quality class exhibits a slightly wider spread. Both quality classes contain numerous outliers, but Poor quality coffee has more extreme values, with defect counts exceeding 15.
 
 ```{r}
 #| echo: true
@@ -172,7 +172,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   labs(x = "Qualityclass", y = "Altitude (by meters)")+
   theme(legend.position = "none")
 ```
-In @fig-boxplot5, boxplot visualizes the distribution of mean altitude (in meters) for coffee samples classified into Good and Poor quality classes. The median altitude for the Good quality class is slightly higher than that of the Poor quality class. Both quality classes exhibit similar IQRs (box lengths), indicating comparable variability in growing altitudes. However, the Good quality class appears to have a higher overall distribution of altitude values. Both quality classes contain multiple outliers, but the Poor quality class has more extreme low-altitude values. In conclusion, good quality coffee is generally associated with higher altitude cultivation, while Poor quality coffee includes more low-altitude samples and exhibits greater variability. 
+@fig-boxplot5 shows a boxplot of Mean Altitude(in meters) of two defects for coffee batch being classified as Good and Poor quality. The median altitude for the Good quality class is slightly higher than that of the Poor quality class. Both quality classes exhibit similar IQRs (box lengths). However, the Good quality class appears to have a higher overall distribution of altitude values. Both quality classes contain multiple outliers, but the Poor quality class has more extreme low-altitude values.
 ```{r}
 #| echo: true
 #| fig-cap: Harvested Year by Coffee Quality Class
@@ -185,7 +185,9 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 
 ```
-In @fig-boxplot6, this boxplot visualizes the distribution of harvested years for coffee samples categorized as Good and Poor quality classes. The median harvested year for both Good and Poor quality classes appears to be similar, around 2014, suggesting that coffee quality may not be strongly influenced by the harvest year within this dataset. The IQRs (box lengths) are nearly identical, indicating that both quality classes have a similar spread of harvested years. The typical harvest years for both Good and Poor quality coffee range approximately from 2012 to 2016. There do not appear to be significant outliers, suggesting a relatively consistent harvest time distribution across quality classes. In conclusion, harvest year does not appear to be a key determinant of coffee quality in this dataset.
+@fig-boxplot6 shows a boxplot of Mean Altitude(in meters) of two defects for coffee batch being classified as Good and Poor quality. The median harvested year for both Good and Poor quality classes appears to be similar and the IQRs (box lengths) are nearly identical. There do not appear to be significant outliers.
+
+To sum up, sensory attributes, especially Flavor, are the strongest predictors of coffee quality. Defect count does not strongly determine quality, as other factors (e.g., sensory attributes and processing methods) play a more significant role. Higher altitude generally correlates with better quality, but it is not the sole determining factor. Good quality coffee can still be produced at lower altitudes with proper post-harvest processing. Harvest year alone does not determine quality, as proper storage and handling can maintain coffee quality over time.
 # Formal Analysis
 
 ## Model Fitting
@@ -215,8 +217,7 @@ Note in this example, the baseline category for binary response (Qualityclass) i
 summ(model)
 ```
 
-The model suggests that Aroma, Flavor, and Acidity are the most important factors in determining coffee quality. Harvested Year is also not significant (p = 0.11), suggesting that coffee quality classification does not strongly depend on the year it was harvested. 
-Note that the explanatory variable category_two_defects has a p-value of 1, which is not significant at all. Consequently, it should not be considered for the further analysis and should be removed initially.
+The model suggests that Aroma, Flavor, and Acidity are the most important factors in determining coffee quality. Harvested Year is not significant (p = 0.11), suggesting that coffee quality classification does not strongly depend on the year it was harvested. Note that the explanatory variable category_two_defects has a p-value of 1, which is not significant at all. Consequently, it should not be considered for the further analysis and should be removed initially.
 
 ```{r}
 # Model with one variable dropped.
@@ -275,7 +276,13 @@ mod1coefs <- round(coef(model3),4)
 
 where *p* = Prob (Quality score is **Poor**) and 1 - p = Prob(Quality score is **Good**) as we already check and confirmed the baseline category response is Good in the previous step.
 
-Thus, the log-odds of the Quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged. Similarly, the log-odds of the Quality score for the batch is Poor decrease by 7.02 for every unit increase in flavor grade when hold other variables kept unchanged. And the log-odds of the Quality score for the batch is Poor decrease by 4.42 for every unit increase in acidity grade when hold other variables constant.The log-odds of a coffee batch being Poor slightly decreases as altitude increases when hold other variables kept unchanged.
+The log-odds of the Quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged. 
+
+The log-odds of the Quality score for the batch is Poor decrease by 7.02 for every unit increase in flavor grade when hold other variables kept unchanged.  
+
+The log-odds of the Quality score for the batch is Poor decrease by 4.42 for every unit increase in acidity grade when hold other variables constant.
+
+The log-odds of a coffee batch being Poor slightly decrease by 0.0008 as mean altitude increases when hold other variables kept unchanged.
 
 ```{r}
 #| echo: true
@@ -286,7 +293,7 @@ confint(model3)|>
   kable()
 ```
 
-For @tbl-logoddsCI, since most of the intervals don't contain 1 thus again confirmed that the explanatory variables in model 2 are significant excluding the harvested. Flavor has the largest effect (widest range of negative values), reinforcing its importance in coffee quality classification. Altitude has the smallest effect size, though it remains statistically significant.
+For @tbl-logoddsCI, since most of the intervals don't contain 0 thus again confirmed that the explanatory variables in model 3 are significant excluding the harvested. Flavor has the largest effect (widest range of negative values), reinforcing its importance in coffee quality classification. Altitude has the smallest effect size, though it remains statistically significant.
 
 ```{r}
 #| echo: true
@@ -312,7 +319,7 @@ coffee1 <- coffee1 |>
   mutate(logodds.poor = predict(model3))
 ```
 
-For @tbl-logoddsCI, since most of the intervals($[-6.0908,-3.2701]$ for aroma grade, $[-8.8598,-5.4496]$ for flavor grade, $[-5.4826,-2.8223]$ for acidity grade, $[-0.0013,-0.0003]$ for altitude_mean_meters grade, $[-0.2124,0.0203]$ for harvested grade), excluding the variable harvested, don't contain zero thus indicates that the explanatory variables in model 2 are significant. And the @fig-CIplotodd again confirmed the significant of the explanatory variables visually.
+For @tbl-logoddsCI, since most of the intervals($[-8.8354,-5.4369]$ for flavor grade, $[-5.9336,-3.1506]$ for aroma grade, $[-5.5577,-2.8939]$ for acidity grade, $[-0.0013,-0.0003]$ for altitude_mean_meters grade), don't contain zero thus indicates that the explanatory variables in model 3 are significant. And the @fig-CIplotodd again confirmed the significant of the explanatory variables visually.
 
 For more straightforward interpretation, we use Odds ratio scale.
 
@@ -334,13 +341,15 @@ model3 |>
   gt()
 ```
 
-the value of the intercept ($1.82\times10^{52}$) gives the odds of a quality class being poor given all explanatory variables equal to zero, but in reality, it is highly unlikely for a batch of coffee have the grades of aroma, flavor and acidity all approach to zero. It could still be interpreted as when chance of a batch of coffee be classified as poor quality are ($1.82\times10^{52}$) % greater than them being classified as good quality when all the explanatory variable equals to zero.
+the value of the intercept ($1.44\times10^{52}$) gives the odds of a quality class being poor given all explanatory variables equal to zero, but in reality, it is highly unlikely for a batch of coffee have the grades of aroma, flavor and acidity all approach to zero. It could still be interpreted as when chance of a batch of coffee be classified as poor quality are ($1.44\times10^{52}$) % greater than them being classified as good quality when all the explanatory variable equals to zero.
 
-For aroma grade, we have an odds of $1.10\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor increase by a factor of 0.01 when other variables unchanged.
+For aroma grade, we have an odds of $1.11\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor increase by a factor of 0.01 when other variables unchanged.
 
-The odds for flavor grade is $8.98\times10^{-4}$, thus the odds of the quality class being poor increase by a factor of 0.00089 for every 1 unit increase in flavor grade,keeping all other variables constant.
+The odds for flavor grade is $8.44\times10^{-4}$, thus the odds of the quality class being poor increase by a factor of 0.000844 for every 1 unit increase in flavor grade, keeping all other variables constant.
 
-Finally, the odds for acidity grade is $1.20\times10^{-2}$, indicating that for every 1 unit increase in acidity grade, the odds of the quality class being poor increase by a factor of 0.012 keeping all other variable constant.
+The odds for acidity grade is $1.50\times10^{-2}$, indicating that for every 1 unit increase in acidity grade, the odds of the quality class being poor increase by a factor of 0.015 keeping all other variable constant.
+
+Finally, the odds for mean altitude(meters) is $9.99\times10^{-1}$, indicating that for every 1 unit increase in mean altitude(meters), the odds of the quality class being poor increase by a factor of 0.999 keeping all other variable constant.
 
 ```{r}
 #| echo: true
@@ -360,7 +369,7 @@ plot_model(model3, show.values = TRUE,
            title = "Odds (Poor Quality Score)", show.p = FALSE)
 ```
 
-From @tbl-oddsCI, most of the intervals($[0.0023, 0.0380]$ for aroma grade, $[0.00014,0.0043]$ for flavor grade, $[0.0042, 0.0594]$ for acidity grade, $[0.9986, 0.9997]$ for altitude_mean_meters grade, $[0.8087, 1.0205]$ for harvested grade) don't contain zero thus indicate that the explanatory variables in model 2 are significant.
+From @tbl-oddsCI, most of the intervals($[0.00015, 0.0044]$ for flavor grade, $[0.0026,0.0428]$ for aroma grade, $[0.0039, 0.0554]$ for acidity grade, $[0.9987, 0.9997]$ for altitude_mean_meters grade) don't contain zero thus indicate that the explanatory variables in model 3 are significant.
 
 The @fig-CIplotodd shows the 95% confidence intervals for three explanatory variable, again confirmed the significance of the explanatory variables visually.
 
@@ -426,40 +435,14 @@ ggplot(data = coffee1, aes(x = altitude_mean_meters, y = probs.poor)) +
        y = "Probability of Quality Score is Poor by altitude_mean_meters Grade")
 ```
 
-```{r}
-#| echo: true
-#| fig-cap: Probability of Quality Score is Poor by Harvested Grade.
-#| label: fig-prob5
-ggplot(data = coffee1, aes(x = acidity, y = probs.poor)) +
-  geom_smooth(method="glm", 
-              method.args = list(family="binomial"), 
-              se = FALSE) +
-  labs(x = "Harvested Grade", 
-       y = "Probability of Quality Score is Poor by Harvested Grade")
-```
-
 As @fig-prob1 shows the probability of the quality score being classified as poor by aroma grade, the less the aroma grade , the higher probability being classified as poor quality. It's reasonable to have such shape as the median aroma grade is round 7.2 (recalled from the @fig-boxplot1 ) so the outliers (aroma grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
-Similar interpretations will used for @fig-prob2, @fig-prob3 and @fig-prob5. These three plots indicate the probabilities of the quality score being classified as poor by flavor, acidity grade and harvested year. Again, the higher score of the flavor grade, acidity grade or harvested year, the less probability being classified as poor quality. According to @fig-boxplot3, @fig-boxplot4 and @fig-boxplot6, it's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) and harvested year contains extreme low-altitude values (close to zero) will be directly classified as poor quality with the probability of 1.
+Similar interpretations will used for @fig-prob2, @fig-prob3. These three plots indicate the probabilities of the quality score being classified as poor by flavor, acidity grade. Again, the higher score of the flavor grade, acidity grade, the less probability being classified as poor quality. According to @fig-boxplot3, @fig-boxplot4, it's also reasonable to have such shape: the outliers (flavor grade equals to zero or acidity grade equals to zero) will be directly classified as poor quality with the probability of 1.
 
-As @fig-prob4 shows the probability of the quality score being classified as poor by aroma grade, lower altitudes correspond to a higher probability of being classified as poor quality, aligning with @fig-boxplot5, where Poor quality coffee has more low-altitude samples. The probability curve gradually declines, indicating better quality at higher altitudes. It is also reasonable to have such shape: the outliers (large number of altitude close to zero) will be classified as poor quality with the probability of 0.8.
+As @fig-prob4 shows the probability of the quality score being classified as poor by mean altitude grade, lower altitudes correspond to a higher probability of being classified as poor quality, aligning with @fig-boxplot5, where Poor quality coffee has more low-altitude samples. The probability curve gradually declines, indicating better quality at higher altitudes.
 
 
 # Conclusion
-Sensory Attributes (Aroma, Flavor, Acidity) Are the Strongest Predictors:
-Figures @fig-prob1, @fig-prob2, and @fig-prob3 confirm that higher aroma, flavor, and acidity scores significantly reduce the probability of being classified as Poor quality. Flavor has the largest impact, followed by aroma and acidity. Boxplots (@fig-boxplot1, @fig-boxplot2, @fig-boxplot3) further show that Good quality coffee has consistently higher sensory scores.
-Implication: Farmers should prioritize improving flavor, aroma, and acidity through better cultivation, harvesting, and processing techniques.
+Sensory attributes (Aroma, Flavor, Acidity) are the the most infulencial variables for predicting the quality score of coffee batch: @fig-prob1, @fig-prob2, and @fig-prob3 confirm that higher aroma, flavor, and acidity scores significantly reduce the probability of being classified as Poor quality. Notice that flavor has the largest impact, followed by aroma and acidity. Boxplots (@fig-boxplot1, @fig-boxplot2, @fig-boxplot3) further show that good quality coffee has consistently higher sensory scores. Then, Altitude has a moderate but still significant effect on the quality score of coffee batch.
 
-Altitude Has a Moderate but Significant Effect:
-@fig-prob4 shows that higher altitude correlates with better coffee quality, with low-altitude coffee more likely to be classified as Poor. @fig-boxplot5 confirms that Good coffee tends to be grown at higher altitudes, though outliers exist.
-Implication: Farmers in higher-altitude regions may naturally produce higher-quality coffee, while low-altitude farmers may need to focus on post-harvest processing to compensate.
-
-Harvested Year Has Limited Impact:
-@fig-prob5 shows that coffee from older harvests has a higher probability of being Poor, aligning with @fig-boxplot6, where Poor quality coffee tends to have older harvest years. However, the overlapping boxplots indicate that harvest year alone does not strictly determine quality—some older beans still maintain high quality.
-Implication: Farmers should focus on proper storage and post-harvest processing to preserve quality over time.
-
-By implementing following improvements, local coffee farmers can enhance their coffee quality and increase the chances of classification as high-quality (Good) coffee.
-1. Focus on enhancing sensory attributes (Flavor, Aroma, Acidity) – This has the greatest impact on quality classification. 
-2. If growing at low altitudes, compensate with better processing techniques – Higher altitudes naturally favor quality, but post-harvest handling can improve lower-altitude coffee.
-3. Ensure proper storage and handling of harvested beans – Even older harvests can maintain high quality if well-preserved.
-4. Processing quality matters more than defects or origin – Farmers should focus on fermentation, drying, and sorting techniques to maximize quality.
+Therefore, focus on improving sensory attributes (Flavor, Aroma, Acidity) and growing coffee at low altitudes, the local coffee farmers will have greater chance that their coffee being classified as high quality(Good).
