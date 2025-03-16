@@ -32,8 +32,10 @@ library(jtools)
 library(gt)
 library(MASS)
 library(knitr)
-library(dplyr)
 library(broom)
+library(GGally)
+library(ggplot2)
+library(dplyr)
 ```
 
 # Introduction
@@ -48,18 +50,35 @@ What factors will influence the quality score of a batch of coffee being classif
 
 ## Description of Data
 
+### Data Source
+
+The dataset utilized in this study originates from the Coffee Quality Institute, containing detailed attributes related to coffee quality.
+The primary objective of this dataset is to analyze the key factors influencing coffee quality scores and to provide insights that may assist local coffee producers in enhancing their production standards.
+
 ```{r}
 #| echo: true
 # Read dataset
 coffee <- read.csv("dataset13.csv")
+dim(coffee)
 ```
 
+The dataset is first loaded and examined to assess its structure and completeness, which comprises multiple variables that capture key characteristics of coffee, including sensory attributes (e.g., aroma, flavor, acidity), environmental factors (e.g., altitude, harvest year), and quality classification (good or poor).
+
+### Data Preprocessing
+
+#### Remove missing value and transformation of Categorical Variables
+
 ```{r}
-# Remove missing value in the dataset
+
 coffee1 <- na.omit(coffee)
 # Check the type of the binary response variable and change to factor type.
 coffee1$Qualityclass <- as.factor(coffee1$Qualityclass)
 ```
+
+Since the response variable Qualityclass represents a binary classification (good vs. poor), it is converted into a factor variable to facilitate appropriate statistical modeling.
+This conversion is particularly important for fitting a Generalized Linear Model (GLM), as it allows categorical outcomes to be appropriately modeled.
+
+#### Detection and Removal of Outliers
 
 ```{r}
 # Remove the outliers
@@ -81,12 +100,63 @@ for (col in names(coffee1)[numeric_cols]) {
 coffee1 <- coffee1[keep_rows, ]
 ```
 
+Extreme values in numerical variables may distort statistical inference.
+Therefore, outliers are detected and removed using the Interquartile Range (IQR) method.
+
+#### Examination of Variable Distribution
+
 ```{r}
 # Check type of harvested year.
 length(unique(coffee1$country_of_origin))
 length(unique(coffee1$harvested))
 class(coffee1$harvested)
 ```
+
+A preliminary assessment of the country of origin and harvest year variables is conducted to understand their diversity and distribution.
+
+The results indicate: 33 unique countries of origin; 9 distinct harvest years.
+
+The harvested year variable is stored as an integer.
+
+### Variable Definitions
+
+```{r}
+
+variable <- data.frame(
+  variablename = c("Qualityclass", "Aroma", "Flavor", "Acidity", 
+                    "Category Two Defects", "Altitude Mean Meters", 
+                    "Harvested", "Country of Origin"),
+  Description = c("Coffee quality classification (Good/Poor)", 
+                  "Sensory evaluation of coffee aroma", 
+                  "Sensory evaluation of coffee flavor", 
+                  "Sensory evaluation of coffee acidity", 
+                  "Number of defects affecting coffee quality", 
+                  "Mean altitude at which coffee is cultivated", 
+                  "Year in which the coffee was harvested", 
+                  "Country where the coffee was grown"),
+  Type = c(sapply(coffee1[c("Qualityclass", "aroma", "flavor", "acidity", 
+                            "category_two_defects", "altitude_mean_meters", 
+                            "harvested", "country_of_origin")], class)),
+  Unit = c("-", "Score (1-10)", "Score (1-10)", "Score (1-10)", 
+           "Count", "Meters", "Year", "-")
+)
+
+variable %>%
+  gt() %>%
+  tab_header(
+    title = "Description of Variables"
+  ) %>%
+  tab_options(
+    table.width = pct(100)
+  )
+
+```
+
+This table provides a structured overview of the dataset, ensuring clarity in variable interpretation.
+
+### Correlation Analysis
+
+Prior to model fitting, a correlation matrix is computed to assess potential relationships between numerical explanatory variables.
 
 ```{r}
 #| echo: true
@@ -101,6 +171,23 @@ coffee1|>
   as.data.frame()|>
   rownames_to_column(var = "Variable")|>
   gt()
+
+```
+
+```{r}
+#| echo: true
+#| label: Pair Plot
+#| tbl-cap: Correlation table between variables
+coffee_numeric <- coffee1 %>%
+  dplyr::select(aroma, flavor, acidity, category_two_defects, altitude_mean_meters, harvested)
+
+ggpairs(coffee_numeric,
+        title = "Pairwise Correlation Analysis of Coffee Quality Factors",
+        upper = list(continuous = wrap("cor", size = 5)),
+        lower = list(continuous = wrap("points", alpha = 0.6)),
+        diag = list(continuous = wrap("densityDiag")))
+
+
 ```
 
 Notice that there were high correlations found between the pairs aroma and flavor(0.83); aroma and acidity(0.75); flavor and acidity(0.84), suggesting that possible colinearity occurred.
