@@ -1,5 +1,5 @@
 ---
-title: "Draft "
+title: "Analysis of the Factors Affect the Quality Class Being Classified as Poor for Coffee Batch Using GLM"
 author: "Group 13"
 number-sections: true
 format: 
@@ -119,9 +119,20 @@ The results indicate: 33 unique countries of origin; 9 distinct harvest years.
 
 The harvested year variable is stored as an integer.
 
+### Scaling the Variable
+
+```{r}
+coffee1$altitude_mean_meters <- scale(coffee1$altitude_mean_meters)
+```
+
+Since the value of the variable, mean altitude is extrmely larger than other continuous explanatory variables, this might cause the model instability and biased coefficient interpretation, which making it harder to interpret and compare with other variables.
+Therefore, the standardization or scaling of the variable is required.
+
 ### Variable Definitions
 
 ```{r}
+
+coffee1$altitude_mean_meters <- as.numeric(scale(coffee1$altitude_mean_meters))
 
 variable <- data.frame(
   variablename = c("Qualityclass", "Aroma", "Flavor", "Acidity", 
@@ -157,30 +168,15 @@ This table provides a structured overview of the dataset, ensuring clarity in va
 
 ### Correlation Analysis
 
-Prior to model fitting, a correlation matrix is computed to assess potential relationships between numerical explanatory variables.
-
-```{r}
-#| echo: true
-#| label: tbl-correlation between numerical explanatory variables.
-#| tbl-cap: Correlation table between variables
-coffee1|>
-  dplyr::select(aroma,flavor,acidity,
-         category_two_defects,
-         altitude_mean_meters,
-         harvested)|>
-  cor()|>
-  as.data.frame()|>
-  rownames_to_column(var = "Variable")|>
-  gt()
-
-```
+Prior to model fitting, a pairwised correlation plot is computed to assess potential relationships between numerical explanatory variables.
 
 ```{r}
 #| echo: true
 #| label: Pair Plot
-#| tbl-cap: Correlation table between variables
+#| tbl-cap: Correlation table between variables 
 coffee_numeric <- coffee1 %>%
-  dplyr::select(aroma, flavor, acidity, category_two_defects, altitude_mean_meters, harvested)
+  dplyr::select(aroma, flavor, acidity,category_two_defects, harvested) %>%
+  mutate(across(where(is.factor), as.numeric))
 
 ggpairs(coffee_numeric,
         title = "Pairwise Correlation Analysis of Coffee Quality Factors",
@@ -278,7 +274,7 @@ ggplot(data = coffee1, aes(x=Qualityclass,
   theme(legend.position = "none")
 ```
 
-@fig-boxplot5 shows a boxplot of mean altitude(in meters) of coffee batch being classified as Good and Poor quality.
+@fig-boxplot5 shows a boxplot of scaled mean altitude(in meters) of coffee batch being classified as Good and Poor quality.
 The median altitude for the Good quality class is slightly higher than that of the Poor quality class and IQRs for two classes are similar.
 However, the Good quality class appears to have a higher overall distribution of altitude values.
 Both quality classes contain multiple outliers, but the Poor quality class has more extreme low-altitude values.
@@ -329,7 +325,7 @@ Note in this example, the baseline category for binary response (Qualityclass) i
 summ(model1)
 ```
 
-The model suggests that Aroma, Flavor, and Acidity are the most important factors in determining coffee quality.
+The Model 1 suggests that Aroma, Flavor, Acidity grades and mean altitude are the most important factors in determining coffee quality class.
 Harvested Year is not significant (p = 0.11), suggesting that coffee quality classification does not strongly depend on the year it was harvested.
 Note that the explanatory variable category_two_defects has a p-value of 1, which is not significant at all.
 Consequently, it should not be considered for the further analysis and should be removed initially.
@@ -345,8 +341,8 @@ model2 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
 summ(model2)
 ```
 
-The model remains strong and statistically valid, with Aroma, Flavor, and Acidity being the strongest predictors of coffee quality.
-Altitude is statistically significant but has a small effect, meaning it may not be a primary determinant of quality.
+The Model 2 shows that the variables Aroma, Flavor, Acidity grades and mean altitude are significant predictors of coffee quality.
+
 AIC and BIC both decreased, indicating that removing insignificant variables does not impact predictive power.
 Assuming a p-value of 0.05, harvested Year (p = 0.11) remains not statistically significant, meaning coffee quality is not strongly dependent on the year of harvest, an attempt was made to remove the only non-significant variable, harvested.
 
@@ -360,9 +356,9 @@ model3 <- glm(formula = Qualityclass~ aroma + flavor + acidity +
 summ(model3)
 ```
 
-All Remaining Variables Are Statistically Significant (p \< 0.05): Aroma, Flavor, and Acidity remain the strongest predictors, with higher values correlating with better coffee quality；Altitude is still significant, but its effect size is very small.
-The AIC of model 3 is observed to increase a little following the removal of the variable harvested, but the BIC decrease as expected.
-Need to perform further model comparasion using deviance.
+All remaining variables now are statistically significant (p \< 0.05).
+The AIC of Model 3 is observed to increase a little following the removal of the variable harvested, but the BIC decrease as expected.
+It's a bit hard to determine either Model 2 or Model 3 shoukd be used, thus a further model comparison using deviance is required.
 
 ```{r}
 #| echo: true
@@ -374,12 +370,12 @@ glm_model <- glm(Qualityclass ~ .,
 summ(glm_model)
 ```
 
-Aroma, Flavor, and Acidity remain highly significant, confirming their strong impact on coffee quality.
-Several countries of origin (Colombia, India, Thailand, Uganda) are statistically significant, indicating that origin may influence coffee quality.
-However, many country of origin variables (e.g. Burundi, China, Ethiopia, Vietnam) are not significant, meaning they do not strongly predict coffee quality.
-Altitude, Harvest Year, and Category Two Defects remain non-significant, suggesting they should be removed for the further analysis.
+In the full model, Aroma, Flavor, and Acidity grades remain highly significant, confirming their strong impact on coffee quality, and several countries of origin (like Colombia, India and Thailand) are also statistically significant, indicating that origin may influence coffee quality.
+However, some countres of origin (like China, Ethiopia and Vietnam) are not significant, meaning they do not strongly predict coffee quality.
+Moreover, mean altitude, harvest Year, and Category two defects are not significant in this case.
 
-Following the incorporation of all variables into the model, an enhancement in R square, that is to say an improvement in interpretability, was observed, concomitant with a diminution in AIC.
+Following the incorporation of all variables into the model, there is an enhancement in R square.
+That is to say an improvement in interpretability was observed, associated with a reduction in AIC.
 However, a substantial increase was observed in the BIC, which may not be considered a valuable gain due to the cost of adding a large number of degrees of freedom.
 
 ```{r}
@@ -399,8 +395,7 @@ bind_rows(model.comp.values.model1,
   dplyr::select(Model,null.deviance,df.null,deviance,df.residual,AIC,BIC) %>%
   mutate(Model=Models) %>%  
   kable(
-     digits = 2,
-     caption = "Model comparison values for different models" 
+     digits = 2
   )
 ```
 
@@ -410,8 +405,9 @@ anova(model3,model2,test="Chisq")
 
 As @tbl-select shows that Model 2 seems to have the smallest AIC values (534.34) followed by Model 3(545.96), while Model 3 has the lowest BIC values(574.04).
 To determine the selection of the model, we perform the hypothesis test using residual deviance.
+
 As the result (2.61) is less than the critical value of $\chi^2(1)$ which is 3.84, so that we're not able to reject the null hypothesis and there's no evidence to show that model 2 (with 5 variables) is better.
-Therefore, Model 3(with 4 variables) is deemed to be the most suitable..
+Therefore, Model 3 (with 4 variables) is deemed to be the most suitable.
 
 ## log-odds
 
@@ -428,14 +424,14 @@ mod1coefs <- round(coef(model3),4)
 
 where *p* = Prob (Quality score is **Poor**) and 1 - p = Prob(Quality score is **Good**) as we already check and confirmed the baseline category response is Good in the previous step.
 
-The intercept is 120, menaing that when all explanatory variables are zero, the log-odds of being classified as poor quality is extremely high.
+The intercept is 119, meaning that when all explanatory variables are zero, the log-odds of being classified as poor quality is 119.
 This is extreme condition not normally happened in the real world for coffee batches.
 
-The log-odds of the quality score for the batch is Poor decrease by 4.5 for every unit increase in aroma grade when hold other variables kept unchanged.
+The log-odds of the quality score for the batch is Poor decrease by 4.50 for every unit increase in aroma grade when hold other variables kept unchanged.
 
-Similarly, the log-odds of being classified as poor quality for the batch will decrease by 7.02 and 4.42 for one unit incrase in flavor and acidity grades respectively when keep all other variables constant.
+Similarly, the log-odds of being classified as poor quality for the batch will decrease by 7.07 and 4.20 for one unit increase in flavor and acidity grades respectively when keep all other variables constant.
 
-Mean altitude has a very small negative coefficient compared to the previous three variables, so the log-odds of a coffee batch being Poor slightly decrease by 0.0008 as one unit inrease in mean altitude when hold other variables kept unchanged.
+Mean altitude has a relative small negative coefficient compared to the previous three variables, so the log-odds of a coffee batch being Poor slightly decrease by 0.32 as one unit increase in mean altitude when hold other variables kept unchanged.
 
 ```{r}
 #| echo: true
@@ -446,7 +442,7 @@ confint(model3)|>
   kable()
 ```
 
-For @tbl-logoddsCI, since all the intervals($[-8.8354,-5.4369]$ for flavor grade, $[-5.9336,-3.1506]$ for aroma grade, $[-5.5577,-2.8939]$ for acidity grade, $[-0.0013,-0.0003]$ for mean altitude) don't contain zero thus indicates that the all explanatory variables in Model 3 are significant.
+For @tbl-logoddsCI, since all the intervals($[-8.83,-5.44]$ for flavor grade, $[-5.93,-3.15]$ for aroma grade, $[-5.56,-2.89]$ for acidity grade, $[-0.54,-0.11]$ for mean altitude) don't contain zero thus indicates that the all explanatory variables in Model 3 are significant.
 
 ### 95% Confidence Interval Plot For Log-Odds
 
@@ -460,7 +456,7 @@ plot_model(model3, show.values = TRUE, transform = NULL,
 ```
 
 The @fig-CIplotodd again confirmed the significance of the explanatory variables visually.
-Notice that flavor has the widest range of negative values whereas mean altitude has the narrowst confidence range.
+Notice that flavor has the widest range of negative values whereas mean altitude has the narrowest confidence range.
 
 For more straightforward interpretation, we use Odds ratio scale.
 
@@ -491,7 +487,7 @@ Thus higher aroma grades strongly reduce the likelihood of being classfied as po
 Similarly, the odds for flavor grade and acidity grades are $8.44\times10^{-4}$ and for $1.50\times10^{-2}$ respectively, which both less than 1.
 This means that odds of being classified as poor quality will reduce by 99.9% and 98.5% respectively for every 1 unit increase in flavor grade or acidity grade, keeping all other variables constant.
 
-Finally, the odds for mean altitude(meters) is $9.99\times10^{-1}$, nearly approach to 1, indicating that for every 1 unit increase in mean altitude(meters), it decreases the odds of being classified as poor quality by 0.08% when hold all other vaiables unchanged.
+Finally, the odds for mean altitude(meters) is $7.25\times10^{-1}$, nearly approach to 1, indicating that for every 1 unit increase in mean altitude (meters), it decreases the odds of being classified as poor quality by 27.5% when hold all other variables unchanged.
 Notice that compared to other explanatory variables, mean altitude has a relative small effect on coffee quality classification.
 
 ```{r}
@@ -512,7 +508,7 @@ plot_model(model3, show.values = TRUE,
            title = "Odds (Poor Quality Score)", show.p = FALSE)
 ```
 
-From @tbl-oddsCI, most of the intervals($[0.00015, 0.0044]$ for flavor grade, $[0.0026,0.0428]$ for aroma grade, $[0.0039, 0.0554]$ for acidity grade, $[0.9987, 0.9997]$ for mean altitude) don't contain one thus indicate that the explanatory variables in model 3 are significant.
+From @tbl-oddsCI, most of the intervals($[0.00015, 0.0044]$ for flavor grade, $[0.0026,0.0428]$ for aroma grade, $[0.0039, 0.0554]$ for acidity grade, $[0.582, 0.898]$ for mean altitude) don't contain one thus indicate that the explanatory variables in model 3 are significant.
 
 The @fig-CIplotodd shows the 95% confidence intervals for three explanatory variable, again confirmed the significance of the explanatory variables visually.
 
@@ -594,6 +590,6 @@ The probability curve declines with a general constant rate, indicating better q
 Sensory attributes like Aroma, Flavor, Acidity grades are the the most influential variables for predicting the quality score of coffee batch: @fig-prob1, @fig-prob2, and @fig-prob3 indicate that higher aroma, flavor, and acidity scores significantly reduce the probability of being classified as Poor quality.
 Notice that flavor has the largest impact, followed by aroma and acidity.
 Boxplots (@fig-boxplot1, @fig-boxplot2, @fig-boxplot3) further show that good quality coffee has consistently higher sensory scores.
-Then, Altitude has a moderate but still significant effect on the quality score of coffee batch.
+Then, mean altitude has a moderate but still significant effect on the quality class of coffee batch.
 
-Therefore, focus on improving flavor, aroma and acidity grades, growing coffee at low altitudes, the local coffee farmers will have greater chance that their coffee being classified as high quality (Good).
+Therefore, by focusing on improving flavor, aroma, and acidity grades, and growing coffee at low altitudes, the local coffee farmers will have a greater chance that their coffee being classified as high quality (Good).
