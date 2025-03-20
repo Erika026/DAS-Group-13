@@ -1,5 +1,5 @@
 # DAS-Group-13
-## Project Introduction 
+## Introduction 
 Given the coffee dataset with the features of coffee and overall quality scores from the Coffee Quality Institute, aiming to provide key information to the local coffee farmers and help them improve coffee production with higher quality.
  
 The Generalized Linear Model (GLM) was applied to explore the most influential factors affecting the quality class of the coffee batch.
