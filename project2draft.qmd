@@ -41,11 +41,11 @@ library(broom)
 
 # Introduction
 
-Given the coffee dataset with the features of coffee and overall quality scores from the Coffee Quality Institute, aiming to provide the key information to the local coffee farmer and help them to improve coffee production with higher quality.
+Given the coffee dataset with the features of coffee and overall quality scores from the Coffee Quality Institute, aiming to provide key information to the local coffee farmers and help them to improve coffee production with higher quality.
 
 **Research Question:**
 
-What factors will influence the quality score of a batch of coffee being classified as good or poor and how do these factors affect the quality score for the batch.
+What factors will influence the coffee batch to be classified as good or poor quality, and how do these factors affect the quality score.
 
 # Exploratory Data Analysis
 
@@ -125,7 +125,7 @@ The harvested year variable is stored as an integer.
 coffee1$altitude_mean_meters <- scale(coffee1$altitude_mean_meters)
 ```
 
-Since the value of the variable, mean altitude is extrmely larger than other continuous explanatory variables, this might cause the model instability and biased coefficient interpretation, which making it harder to interpret and compare with other variables.
+Since the value of the variable, mean altitude is extremely larger than other continuous explanatory variables, this might cause the model instability and biased coefficient interpretation, which making it harder to interpret and compare with other variables.
 Therefore, the standardization or scaling of the variable is required.
 
 ### Variable Definitions
@@ -168,7 +168,7 @@ This table provides a structured overview of the dataset, ensuring clarity in va
 
 ### Correlation Analysis
 
-Prior to model fitting, a pairwised correlation plot is computed to assess potential relationships between numerical explanatory variables.
+Prior to model fitting, a pairwised correlation plot is computed to assess potential relationships between continuous explanatory variables.
 
 ```{r}
 #| echo: true
@@ -180,10 +180,12 @@ coffee_numeric <- coffee1 %>%
     mutate(across(where(is.factor), as.numeric))
 
 ggpairs(coffee_numeric,
-        title = "Pairwise Correlation Analysis of Coffee Quality Factors",
-        upper = list(continuous = wrap("cor", size = 5)),
-        lower = list(continuous = wrap("points", alpha = 0.6)),
-        diag = list(continuous = wrap("densityDiag")))
+        title = "Pairwise Correlation Analysis of Coffee Quality Factors")+
+  theme(plot.background = element_rect(
+    fill="transparent",
+    colour = NA,
+    size=1
+  ))
 
 
 ```
@@ -409,7 +411,7 @@ As @tbl-select shows that Model 2 seems to have the smallest AIC values (534.34)
 To determine the selection of the model, we perform the hypothesis test using residual deviance.
 As the result (2.61) is less than the critical value of $\chi^2(1)$ which is 3.84, so that we're not able to reject the null hypothesis and there's no evidence to show that model 2 (with 5 variables) is better.
 
-Therefore, Model 3 (with 4 variables) is deemed to be the most suitable.
+Therefore, Model 3 (with 4 variables) is considered as the most suitable model.
 
 ## log-odds
 
@@ -484,7 +486,7 @@ the value of the intercept ($1.44\times10^{52}$) gives the odds of a quality cla
 It could still be interpreted as when chance of a batch of coffee be classified as poor quality are ($1.44\times10^{52}$) % greater than them being classified as good quality when all the explanatory variable equals to zero.
 
 For aroma grade, we have an odds of $1.11\times10^{-2}$, which indicates that for every 1 unit increase in aroma grade, the odds of the quality class being poor decrease by $(1-1.11\times10^{-2}) \times 100$ % = 98.9% when other variables unchanged.
-Thus higher aroma grades strongly reduce the likelihood of being classfied as poor quality.
+Thus higher aroma grades strongly reduce the likelihood of being classified as poor quality.
 
 Similarly, the odds for flavor grade and acidity grades are $8.44\times10^{-4}$ and for $1.50\times10^{-2}$ respectively, which both less than 1.
 This means that odds of being classified as poor quality will reduce by 99.9% and 98.5% respectively for every 1 unit increase in flavor grade or acidity grade, keeping all other variables constant.
@@ -594,4 +596,4 @@ Notice that flavor has the largest impact, followed by aroma and acidity.
 Boxplots (@fig-boxplot1, @fig-boxplot2, @fig-boxplot3) further show that good quality coffee has consistently higher sensory scores.
 Then, mean altitude has a moderate but still significant effect on the quality class of coffee batch.
 
-Therefore, by focusing on improving flavor, aroma, and acidity grades, and growing coffee at low altitudes, the local coffee farmers will have a greater chance that their coffee being classified as high quality (Good).
+Therefore, by focusing on improving flavor, aroma, and acidity grades (or choose coffee with higher aroma, flavor and acidity grades), and growing coffee at higher altitudes, the local coffee farmers will have a greater chance that their coffee being classified as high quality (Good).
